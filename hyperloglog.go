@@ -34,7 +34,7 @@ func NewHyperLogLog() *MyHLL {
 func (hll *MyHLL) Add(_ context.Context, value string) {
 	x := computeHash(value)
 	index := hll.getIndex(x)
-	pho := computePho(x >> b)
+	pho := computePho(x)
 	if pho > hll.buckets[index] {
 		hll.buckets[index] = pho
 	}
@@ -82,5 +82,5 @@ func computePho(x uint64) int {
 }
 
 func (hll *MyHLL) getIndex(x uint64) int {
-	return int(x & 0x3FFF)
+	return int((x >> b) & 0x3FFF)
 }
