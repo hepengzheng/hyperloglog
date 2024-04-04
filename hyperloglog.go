@@ -22,13 +22,11 @@ type HyperLogLog interface {
 var _ HyperLogLog = (*MyHLL)(nil)
 
 type MyHLL struct {
-	buckets []int
+	buckets [m]int
 }
 
 func NewHyperLogLog() *MyHLL {
-	return &MyHLL{
-		buckets: make([]int, m),
-	}
+	return &MyHLL{}
 }
 
 func (hll *MyHLL) Add(_ context.Context, value string) {
