@@ -11,6 +11,7 @@ const (
 	b                       = 14
 	m                       = 1 << b
 	alpha                   = 0.7213 / (1 + 1.079/float64(m))
+	indexBitPattern         = 1<<b - 1
 	upperBoundRelativeError = 1.04 / (1 << (b >> 1))
 )
 
@@ -76,9 +77,9 @@ func computeHash(s string) uint64 {
 }
 
 func computeRho(x uint64) int {
-	return 1 + bits.TrailingZeros64(x)
+	return 1 + bits.TrailingZeros64(x>>b)
 }
 
 func (hll *MyHLL) getIndex(x uint64) int {
-	return int((x >> b) & 0x3FFF)
+	return int(x & indexBitPattern)
 }
