@@ -5,6 +5,8 @@ import (
 	"hash/fnv"
 	"math"
 	"math/bits"
+
+	"github.com/hepengzheng/gohll/hashing"
 )
 
 const (
@@ -24,14 +26,18 @@ var _ HyperLogLog = (*MyHLL)(nil)
 
 type MyHLL struct {
 	buckets [m]int
+
+	hashAlg hashing.HashAlg
 }
 
-func NewHyperLogLog() *MyHLL {
-	return &MyHLL{}
+func NewHyperLogLog(hashAlg hashing.HashAlg) *MyHLL {
+	return &MyHLL{
+		hashAlg: hashAlg,
+	}
 }
 
 func (hll *MyHLL) Add(_ context.Context, value string) {
-	x := computeHash(value)
+	x := hll.hashAlg(value)
 	index := getIndex(x)
 	pho := computeRho(x)
 	if pho > hll.buckets[index] {
@@ -45,7 +51,7 @@ func (hll *MyHLL) Count(_ context.Context) int {
 		if v := hll.linearCounting(); v != 0 {
 			e = float64(m) * math.Log2(float64(m)/float64(v))
 		}
-	} 
+	}
 	return int(e)
 }
 

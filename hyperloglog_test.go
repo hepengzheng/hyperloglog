@@ -7,11 +7,15 @@ import (
 	"os"
 	"testing"
 
+	"github.com/hepengzheng/gohll/hashing"
 	"github.com/stretchr/testify/assert"
 )
 
 var (
-	myhll    = NewHyperLogLog()
+	myhll_fnv = NewHyperLogLog(hashing.ComputeFnv64)
+	// myhll_sha1    = NewHyperLogLog(hashing.ComputeSha1)
+	// myhll_sha256  = NewHyperLogLog(hashing.ComputeSha256)
+	// myhll_murmur3 = NewHyperLogLog(hashing.ComputeMurmur3)
 	redishll = NewRedisHLL()
 )
 
@@ -34,7 +38,7 @@ func init() {
 	redishll.rdb.Del(ctx, redisKey)
 	for scanner.Scan() {
 		line := scanner.Text()
-		myhll.Add(ctx, line)
+		myhll_fnv.Add(ctx, line)
 		redishll.Add(ctx, line)
 	}
 
@@ -42,7 +46,7 @@ func init() {
 
 func Test_MyHLL(t *testing.T) {
 	ctx := context.Background()
-	count := myhll.Count(ctx)
+	count := myhll_fnv.Count(ctx)
 	fmt.Printf("count: %d\n", count)
 	relativeErr := relativeError(count)
 	assert.True(t, relativeErr < upperBoundRelativeError)
@@ -52,7 +56,7 @@ func Test_MyHLL(t *testing.T) {
 func Benchmark_MyHLL(b *testing.B) {
 	ctx := context.Background()
 	for i := 0; i < b.N; i++ {
-		_ = myhll.Count(ctx)
+		_ = myhll_fnv.Count(ctx)
 	}
 }
 
