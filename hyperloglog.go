@@ -11,7 +11,7 @@ const (
 	b                       = 14
 	m                       = 1 << b
 	alpha                   = 0.7213 / (1 + 1.079/float64(m))
-	indexBitPattern         = 1<<b - 1
+	indexBitPattern         = m - 1
 	upperBoundRelativeError = 1.04 / (1 << (b >> 1))
 )
 
@@ -45,9 +45,7 @@ func (hll *MyHLL) Count(_ context.Context) int {
 		if v := hll.linearCounting(); v != 0 {
 			e = float64(m) * math.Log2(float64(m)/float64(v))
 		}
-	} else if e >= (1<<32)/30 {
-		e = -(1 << 32) * math.Log2(1-e/float64(1<<32))
-	}
+	} 
 	return int(e)
 }
 
@@ -66,8 +64,7 @@ func (hll *MyHLL) rawEstimate() float64 {
 	for _, bucket := range hll.buckets {
 		sum += math.Pow(2, -float64(bucket))
 	}
-	estimate := alpha * float64(m*m) / sum
-	return estimate
+	return alpha * float64(m*m) / sum
 }
 
 func computeHash(s string) uint64 {

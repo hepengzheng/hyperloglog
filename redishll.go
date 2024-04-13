@@ -29,6 +29,5 @@ func (rhll *RedisHLL) Add(ctx context.Context, s string) {
 }
 
 func (rhll *RedisHLL) Count(ctx context.Context) int {
-	cmd := rhll.rdb.PFCount(ctx, redisKey)
-	return int(cmd.Val())
+	return int(rhll.rdb.PFCount(ctx, redisKey).Val())
 }
