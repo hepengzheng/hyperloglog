@@ -24,8 +24,25 @@ I also compared this program with Redis' HyperLogLog using the same test data, s
 
 Murmur3 is chosen for this test.
 
+Benchmark on Intel mackbook pro:
 
-Benchmarks on M3 mackbook pro:
+```
+go test -bench=. -benchtime=30s
+count: 987141
+relative error of my implementation: 0.002860
+redis count: 979807
+relative error of Redis' implementation: 0.010194
+goos: darwin
+goarch: amd64
+pkg: github.com/hepengzheng/gohll
+cpu: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+Benchmark_MyHLL-12       	   72052	    498500 ns/op
+Benchmark_RedisHLL-12    	  475570	     77690 ns/op
+PASS
+ok  	github.com/hepengzheng/gohll	145.780s
+```
+
+Benchmark on M3 mackbook pro:
 ```
 $ go test -bench=. -benchtime=30s
 count: 987141
