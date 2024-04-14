@@ -73,12 +73,6 @@ func (hll *MyHLL) rawEstimate() float64 {
 	return alpha * float64(m*m) / sum
 }
 
-func computeHash(s string) uint64 {
-	h := fnv.New64a()
-	_, _ = h.Write([]byte(s))
-	return h.Sum64()
-}
-
 func computeRho(x uint64) int {
 	return 1 + bits.TrailingZeros64(x>>b)
 }
