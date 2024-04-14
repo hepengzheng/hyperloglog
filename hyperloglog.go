@@ -2,7 +2,6 @@ package gohll
 
 import (
 	"context"
-	"hash/fnv"
 	"math"
 	"math/bits"
 
