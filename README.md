@@ -22,19 +22,21 @@ I also compared this program with Redis' HyperLogLog using the same test data, s
 
 ## Benchmark
 
-```
-$ go test -bench=. -benchtime=10s
+Murmur3 is chosen for this test.
 
-count: 994252
-relative error of my implementation: 0.004251
+
+Benchmarks on M3 mackbook pro:
+```
+$ go test -bench=. -benchtime=30s
+count: 987141
+relative error of my implementation: 0.002860
 redis count: 979807
 relative error of Redis' implementation: 0.010194
 goos: darwin
-goarch: amd64
+goarch: arm64
 pkg: github.com/hepengzheng/gohll
-cpu: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
-Benchmark_MyHLL-12       	   24553	    495411 ns/op
-Benchmark_RedisHLL-12    	  310789	     38793 ns/op
+Benchmark_MyHLL-8      	  119472	    298700 ns/op
+Benchmark_RedisHLL-8   	 1579178	     23010 ns/op
 PASS
-ok  	github.com/hepengzheng/gohll	80.637s
+ok  	github.com/hepengzheng/gohll	129.392s
 ```
